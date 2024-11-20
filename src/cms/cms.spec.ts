@@ -149,13 +149,25 @@ describe("cms", () => {
     test("layer values must be a valid word", async () => {
       const bookId = await generateBook("My test book");
 
+      const lengthyWord = Array.from({ length: 51 }, () => "a").join("");
+
       await expect(
         addLayer({
           bookId,
           layerName: "next layer",
-          values: ["", "apple", "1232", "b33z", "ski-jumping", "w@rd"],
+          values: [
+            "",
+            "apple",
+            "1232",
+            "b33z",
+            "ski-jumping",
+            "w@rd",
+            lengthyWord,
+          ],
         })
-      ).rejects.toThrow('Invalid words in values: "", "1232", "b33z", "w@rd"');
+      ).rejects.toThrow(
+        `Invalid words in values: "", "1232", "b33z", "w@rd", "${lengthyWord}"`
+      );
     });
 
     test("book must be existing", async () => {
@@ -167,8 +179,23 @@ describe("cms", () => {
         })
       ).rejects.toThrow("Book not found");
     });
+
+    describe("layer name", () => {
+      const lengthyWord = Array.from({ length: 51 }, () => "a").join("");
+      const wrongNames = ["", "w@rd", lengthyWord];
+      test.each(wrongNames)(`"%s" is not a valid layer name`, async (name) => {
+        const bookId = await generateBook("My test book");
+        await expect(
+          addLayer({
+            bookId,
+            layerName: name,
+            values: ["apple"],
+          })
+        ).rejects.toThrow(`Invalid layer name: "${name}"`);
+      });
+    });
   });
-  
+
   describe("displaying layers", () => {
     test("we can display various layers of a book", async () => {
       // GIVEN we create a book

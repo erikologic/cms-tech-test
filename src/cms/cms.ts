@@ -27,11 +27,24 @@ export async function listLayers(
 }
 
 function validateValues(values: string[]) {
-  const invalidWords = values.filter((v) => !/^[a-zA-Z-]+$/.test(v));
+  const invalidWords = values.filter((value) => {
+    if (value.length === 0 || value.length > 50) return true;
+    return !/^[a-zA-Z-]+$/.test(value);
+  });
   if (invalidWords.length > 0) {
     throw new Error(`Invalid words in values: "${invalidWords.join('", "')}"`);
   }
 }
+
+function validateLayerName(layerName: string) {
+  if (layerName.length === 0 || layerName.length > 50) {
+    throw new Error(`Invalid layer name: "${layerName}"`);
+  }
+  if (!/^[a-zA-Z0-9- ]+$/.test(layerName)) {
+    throw new Error(`Invalid layer name: "${layerName}"`);
+  }
+}
+
 export async function addLayer({
   bookId,
   layerName,
@@ -42,6 +55,7 @@ export async function addLayer({
   }
 
   validateValues(values);
+  validateLayerName(layerName);
 
   let layer;
   try {

@@ -46,7 +46,7 @@ describe("cms", () => {
       });
 
       // THEN the book will have the new layer
-      const bookLayers = await displayBookAtLayer(bookId);
+      const bookLayers = await displayBookAtLayer(bookId, layerNumber);
       expect(bookLayers[0]).toEqual("anchor");
       expect(bookLayers[1]).toEqual("banana");
     });

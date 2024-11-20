@@ -25,10 +25,16 @@ export async function addLayer({
   return layer.id;
 }
 
-export async function displayBookAtLayer(bookId: number): Promise<string[]> {
+export async function displayBookAtLayer(
+  bookId: number,
+  layerNumber?: number
+): Promise<string[]> {
   const layers = await prisma.layer.findMany({
     where: {
       bookId,
+      id: {
+        lte: layerNumber,
+      },
     },
     orderBy: {
       id: "asc",

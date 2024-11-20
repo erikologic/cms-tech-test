@@ -56,13 +56,13 @@ describe("cms", () => {
       const v4 = await addLayer({
         bookId,
         layerName: "layer 4",
-        values: ["alpha", "beta", "gamma", "delta"],
+        values: ["alpha", "beta", "gamma", "delta", "mike"],
       });
 
       const v5 = await addLayer({
         bookId,
         layerName: "layer 4",
-        values: ["son", "romeo", "jolly", "mike"],
+        values: ["son", "romeo", "jolly", "MINT"],
       });
 
       // THEN we can see the book at each layer
@@ -102,6 +102,7 @@ describe("cms", () => {
           "beta",
           "gamma",
           "delta",
+          "mike",
         ])
       );
 
@@ -119,55 +120,57 @@ describe("cms", () => {
         "son",
         "romeo",
         "jolly",
-        "mike",
+        "mint",
       ]);
       expect(await displayBookAtLayer(bookId, v5)).toEqual(latest);
       // if no layer is specified, the latest layer is returned
       expect(await displayBookAtLayer(bookId)).toEqual(latest);
     });
 
-    test("a new layer must contain between 1 an 26 values", async () => {
-      const bookId = await generateBook("My test book");
+    describe("layer values", () => {
+      test("a new layer must contain between 1 an 26 values", async () => {
+        const bookId = await generateBook("My test book");
 
-      await expect(
-        addLayer({
-          bookId,
-          layerName: "next layer",
-          values: [],
-        })
-      ).rejects.toThrow("A layer must contain between 1 and 26 values");
+        await expect(
+          addLayer({
+            bookId,
+            layerName: "next layer",
+            values: [],
+          })
+        ).rejects.toThrow("A layer must contain between 1 and 26 values");
 
-      await expect(
-        addLayer({
-          bookId,
-          layerName: "next layer",
-          values: Array.from({ length: 27 }, (_, i) => i.toString()),
-        })
-      ).rejects.toThrow("A layer must contain between 1 and 26 values");
-    });
+        await expect(
+          addLayer({
+            bookId,
+            layerName: "next layer",
+            values: Array.from({ length: 27 }, (_, i) => i.toString()),
+          })
+        ).rejects.toThrow("A layer must contain between 1 and 26 values");
+      });
 
-    test("layer values must be a valid word", async () => {
-      const bookId = await generateBook("My test book");
+      test("layer values must be a valid word", async () => {
+        const bookId = await generateBook("My test book");
 
-      const lengthyWord = Array.from({ length: 51 }, () => "a").join("");
+        const lengthyWord = Array.from({ length: 51 }, () => "a").join("");
 
-      await expect(
-        addLayer({
-          bookId,
-          layerName: "next layer",
-          values: [
-            "",
-            "apple",
-            "1232",
-            "b33z",
-            "ski-jumping",
-            "w@rd",
-            lengthyWord,
-          ],
-        })
-      ).rejects.toThrow(
-        `Invalid words in values: "", "1232", "b33z", "w@rd", "${lengthyWord}"`
-      );
+        await expect(
+          addLayer({
+            bookId,
+            layerName: "next layer",
+            values: [
+              "",
+              "apple",
+              "1232",
+              "b33z",
+              "ski-jumping",
+              "w@rd",
+              lengthyWord,
+            ],
+          })
+        ).rejects.toThrow(
+          `Invalid words in values: "", "1232", "b33z", "w@rd", "${lengthyWord}"`
+        );
+      });
     });
 
     test("book must be existing", async () => {

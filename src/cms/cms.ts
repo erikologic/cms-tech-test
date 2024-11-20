@@ -62,7 +62,7 @@ export async function addLayer({
     layer = await prisma.layer.create({
       data: {
         bookId,
-        values,
+        values: values.map((value) => value.toLowerCase()),
         name: layerName,
       },
     });

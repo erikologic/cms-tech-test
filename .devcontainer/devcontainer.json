@@ -2,9 +2,15 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
 	"name": "Node.js & TypeScript",
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+
+
+	// https://containers.dev/guide/dockerfile
+	"dockerComposeFile": "docker-compose.yml",
+    "service": "devcontainer",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	
+	// https://stackoverflow.com/questions/73676584/sharing-ssh-credentials-with-dev-container-in-vscode
 	"mounts": [
-		// https://stackoverflow.com/questions/73676584/sharing-ssh-credentials-with-dev-container-in-vscode
 		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached"
 	],
 	"portsAttributes": {
@@ -61,7 +67,8 @@
 				"ryanrosello-og.playwright-vscode-trace-viewer",
 				"rvest.vs-code-prettier-eslint",
 				"esbenp.prettier-vscode",
-				"timonwong.shellcheck"
+				"timonwong.shellcheck",
+				"ms-azuretools.vscode-docker"
 			]
 		}
 	}

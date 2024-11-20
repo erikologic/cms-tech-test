@@ -27,12 +27,25 @@ export async function addLayer({
 
   validateValues(values);
 
-  const layer = await prisma.layer.create({
-    data: {
-      bookId,
-      values,
-    },
-  });
+  let layer;
+  try {
+    layer = await prisma.layer.create({
+      data: {
+        bookId,
+        values,
+      },
+    });
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message.includes(
+        "Foreign key constraint violated: `Layer_bookId_fkey (index)`"
+      )
+    ) {
+      throw new Error("Book not found");
+    }
+    throw error;
+  }
   return layer.id;
 }
 

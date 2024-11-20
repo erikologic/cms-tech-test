@@ -155,5 +155,15 @@ describe("cms", () => {
         })
       ).rejects.toThrow('Invalid words in values: "", "1232", "b33z", "w@rd"');
     });
+
+    test("book must be existing", async () => {
+      await expect(
+        addLayer({
+          bookId: 123,
+          layerName: "next layer",
+          values: ["apple"],
+        })
+      ).rejects.toThrow("Book not found");
+    });
   });
 });

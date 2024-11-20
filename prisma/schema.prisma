@@ -23,5 +23,5 @@ model Layer {
   id     Int    @id @default(autoincrement())
   bookId Int
   Book   Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
-  value  String
+  values  String[]
 }

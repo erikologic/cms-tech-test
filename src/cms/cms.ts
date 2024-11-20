@@ -4,23 +4,50 @@ type Book = string[];
 
 const prisma = new PrismaClient();
 
-export async function displayBookAtLayer(id: number) {
-  const book = await prisma.book.findUnique({
-    where: {
-      id,
+interface AddLayerParams {
+  bookId: number;
+  layerName: string;
+  values: string[];
+}
+
+export async function addLayer({
+  bookId,
+  layerName,
+  // TODO test input
+  values,
+}: AddLayerParams): Promise<number> {
+  const layer = await prisma.layer.create({
+    data: {
+      bookId,
+      values,
     },
-    include: {
-      layers: true,
+  });
+  return layer.id;
+}
+
+export async function displayBookAtLayer(bookId: number): Promise<string[]> {
+  const layers = await prisma.layer.findMany({
+    where: {
+      bookId,
+    },
+    orderBy: {
+      id: "asc",
     },
   });
 
-  if (!book) {
-    // TODO test what will happen
-    throw new Error("Book not found");
+  // TODO add test
+  if (layers.length === 0) {
+    throw new Error("Book has no layers");
   }
 
-  return book;
+  const letter2wordPairs: [string, string][] = layers
+    .flatMap((layer) => layer.values)
+    .map((value) => [value[0], value]);
+
+  const finalLayer = Object.fromEntries(letter2wordPairs);
+  return Object.values(finalLayer);
 }
+
 export async function generateBook(name: string): Promise<number> {
   let book;
   try {
@@ -28,8 +55,8 @@ export async function generateBook(name: string): Promise<number> {
       data: {
         name,
         layers: {
-          createMany: {
-            data: defaultBook.map((value) => ({ value })),
+          create: {
+            values: defaultValues,
           },
         },
       },
@@ -46,7 +73,7 @@ export async function generateBook(name: string): Promise<number> {
   return book.id;
 }
 
-export const defaultBook: Book = [
+export const defaultValues: Book = [
   "apple",
   "banana",
   "cat",

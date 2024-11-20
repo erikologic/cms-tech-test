@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 type Book = string[];
 
@@ -33,12 +33,22 @@ export const defaultValues: Book = [
 
 const prisma = new PrismaClient();
 
-export async function listLayers(
-  bookId: number
-): Promise<{ id: number; name: string }[]> {
+interface ListLayersParams {
+  bookId: number;
+  userId: number;
+}
+export async function listLayers({
+  bookId,
+  userId,
+}: ListLayersParams): Promise<{ id: number; name: string }[]> {
   const layers = await prisma.layer.findMany({
     where: {
-      bookId,
+      Book: {
+        AND: {
+          id: bookId,
+          userId,
+        },
+      },
     },
     select: {
       id: true,
@@ -56,7 +66,7 @@ export async function listLayers(
   return layers;
 }
 
-function validateValues(values: string[]) {
+function _validateValues(values: string[]) {
   const invalidWords = values.filter((value) => {
     if (value.length === 0 || value.length > 50) return true;
     return !/^[a-zA-Z-]+$/.test(value);
@@ -66,7 +76,7 @@ function validateValues(values: string[]) {
   }
 }
 
-function validateLayerName(layerName: string) {
+function _validateLayerName(layerName: string) {
   if (layerName.length === 0 || layerName.length > 50) {
     throw new Error(`Invalid layer name: "${layerName}"`);
   }
@@ -76,6 +86,7 @@ function validateLayerName(layerName: string) {
 }
 
 interface AddLayerParams {
+  userId: number;
   bookId: number;
   layerName: string;
   values: string[];
@@ -85,30 +96,32 @@ export async function addLayer({
   bookId,
   layerName,
   values,
+  userId,
 }: AddLayerParams): Promise<number> {
   if (values.length === 0 || values.length > 26) {
     throw new Error("A layer must contain between 1 and 26 values");
   }
 
-  validateValues(values);
-  validateLayerName(layerName);
+  _validateValues(values);
+  _validateLayerName(layerName);
 
   let layer;
   try {
     layer = await prisma.layer.create({
       data: {
-        bookId,
+        Book: {
+          connect: {
+            id: bookId,
+            userId,
+          },
+        },
         values: values.map((value) => value.toLowerCase()),
         name: layerName,
       },
     });
   } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message.includes(
-        "Foreign key constraint violated: `Layer_bookId_fkey (index)`"
-      )
-    ) {
+    if (!(error instanceof Error) || !("code" in error)) throw error;
+    if (error.code === "P2025") {
       throw new Error("Book not found");
     }
     throw error;
@@ -118,11 +131,13 @@ export async function addLayer({
 
 interface DisplayBookAtLayerParams {
   bookId: number;
+  userId: number;
   layerNumber?: number;
 }
 
 export async function displayBookAtLayer({
   bookId,
+  userId,
   layerNumber,
 }: DisplayBookAtLayerParams): Promise<string[]> {
   if (layerNumber && layerNumber < 0)
@@ -130,9 +145,14 @@ export async function displayBookAtLayer({
 
   const layers = await prisma.layer.findMany({
     where: {
-      bookId,
+      Book: {
+        AND: {
+          id: bookId,
+          userId,
+        },
+      },
       id: {
-        lte: layerNumber,
+        lte: layerNumber ? layerNumber : Prisma.skip,
       },
     },
     orderBy: {
@@ -155,7 +175,14 @@ export async function displayBookAtLayer({
   return Object.values(finalLayer);
 }
 
-export async function generateBook(name: string): Promise<number> {
+interface GenerateBookParams {
+  name: string;
+  userId: number;
+}
+export async function generateBook({
+  name,
+  userId,
+}: GenerateBookParams): Promise<number> {
   if (name.length < 5 || name.length > 200) {
     throw new Error("Book name must be between 5 and 200 characters");
   }
@@ -165,6 +192,7 @@ export async function generateBook(name: string): Promise<number> {
     book = await prisma.book.create({
       data: {
         name,
+        userId,
         layers: {
           create: {
             name: "default",
@@ -183,4 +211,31 @@ export async function generateBook(name: string): Promise<number> {
     throw error;
   }
   return book.id;
+}
+
+function _validateUserName(name: string) {
+  if (name.length < 3 || name.length > 50 || !/^[a-zA-Z0-9- ]+$/.test(name)) {
+    throw new Error(`Invalid user name: "${name}"`);
+  }
+}
+
+export async function createUser(name: string): Promise<number> {
+  _validateUserName(name);
+  let user;
+  try {
+    user = await prisma.user.create({
+      data: {
+        name,
+      },
+    });
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message.includes("Unique constraint failed on the fields: (`name`)")
+    ) {
+      throw new Error("A user with that name already exists");
+    }
+    throw error;
+  }
+  return user.id;
 }

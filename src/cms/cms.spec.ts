@@ -50,5 +50,25 @@ describe("cms", () => {
       expect(bookLayers[0]).toEqual("anchor");
       expect(bookLayers[1]).toEqual("banana");
     });
+
+    test("a new layer must contain between 1 an 26 values", async () => {
+      const bookId = await generateBook("My test book");
+
+      await expect(
+        addLayer({
+          bookId,
+          layerName: "next layer",
+          values: [],
+        })
+      ).rejects.toThrow("A layer must contain between 1 and 26 values");
+
+      await expect(
+        addLayer({
+          bookId,
+          layerName: "next layer",
+          values: Array.from({ length: 27 }, (_, i) => i.toString()),
+        })
+      ).rejects.toThrow("A layer must contain between 1 and 26 values");
+    });
   });
 });

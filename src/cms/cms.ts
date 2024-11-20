@@ -16,6 +16,10 @@ export async function addLayer({
   // TODO test input
   values,
 }: AddLayerParams): Promise<number> {
+  if (values.length === 0 || values.length > 26) {
+    throw new Error("A layer must contain between 1 and 26 values");
+  }
+
   const layer = await prisma.layer.create({
     data: {
       bookId,

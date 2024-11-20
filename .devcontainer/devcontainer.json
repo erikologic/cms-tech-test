@@ -31,7 +31,7 @@
 	"containerEnv": {
 		"DATABASE_URL": "postgresql://postgres:password@localhost:5432/db"
 	},
-	"updateContentCommand": "npm install && npm exec prisma migrate dev --name init",
+	"updateContentCommand": "npm install && npm run prisma:migrate -- --name init",
 	"postAttachCommand": "npm run dev",
 	
 	// Configure tool-specific properties.

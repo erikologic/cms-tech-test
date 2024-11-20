@@ -1,10 +1,37 @@
+import { PrismaClient } from "@prisma/client";
+
 type Book = string[];
 
-export function displayBookAtLayer(bookId: number): Promise<Book> {
-  return Promise.resolve(defaultBook);
+const prisma = new PrismaClient();
+
+export async function displayBookAtLayer(id: number) {
+  const book = await prisma.book.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      layers: true,
+    },
+  });
+
+  if (!book) {
+    throw new Error("Book not found");
+  }
+
+  return book;
 }
-export function generateBook(name: string): Promise<number> {
-  return Promise.resolve(1);
+export async function generateBook(name: string): Promise<number> {
+  const book = await prisma.book.create({
+    data: {
+      name,
+      layers: {
+        createMany: {
+          data: defaultBook.map((value) => ({ value })),
+        },
+      },
+    },
+  });
+  return book.id;
 }
 
 export const defaultBook: Book = [

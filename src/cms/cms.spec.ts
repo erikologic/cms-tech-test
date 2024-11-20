@@ -70,5 +70,19 @@ describe("cms", () => {
         })
       ).rejects.toThrow("A layer must contain between 1 and 26 values");
     });
+
+    test("layer values must be a valid word", async () => {
+      const bookId = await generateBook("My test book");
+
+      await expect(
+        addLayer({
+          bookId,
+          layerName: "next layer",
+          values: ["", "apple", "1232", "b33z", "ski-jumping", "w@rd"],
+        })
+      ).rejects.toThrow(
+        'Invalid words in values: "", "1232", "b33z", "w@rd"'
+      );
+    });
   });
 });

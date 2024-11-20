@@ -10,15 +10,22 @@ interface AddLayerParams {
   values: string[];
 }
 
+function validateValues(values: string[]) {
+  const invalidWords = values.filter((v) => !/^[a-zA-Z-]+$/.test(v));
+  if (invalidWords.length > 0) {
+    throw new Error(`Invalid words in values: "${invalidWords.join('", "')}"`);
+  }
+}
 export async function addLayer({
   bookId,
   layerName,
-  // TODO test input
   values,
 }: AddLayerParams): Promise<number> {
   if (values.length === 0 || values.length > 26) {
     throw new Error("A layer must contain between 1 and 26 values");
   }
+
+  validateValues(values);
 
   const layer = await prisma.layer.create({
     data: {

@@ -10,6 +10,22 @@ interface AddLayerParams {
   values: string[];
 }
 
+export async function listLayers(
+  bookId: number
+): Promise<{ id: number; name: string }[]> {
+  const layers = await prisma.layer.findMany({
+    where: {
+      bookId,
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+
+  return layers;
+}
+
 function validateValues(values: string[]) {
   const invalidWords = values.filter((v) => !/^[a-zA-Z-]+$/.test(v));
   if (invalidWords.length > 0) {
@@ -33,6 +49,7 @@ export async function addLayer({
       data: {
         bookId,
         values,
+        name: layerName,
       },
     });
   } catch (error) {
@@ -86,6 +103,7 @@ export async function generateBook(name: string): Promise<number> {
         name,
         layers: {
           create: {
+            name: "default",
             values: defaultValues,
           },
         },

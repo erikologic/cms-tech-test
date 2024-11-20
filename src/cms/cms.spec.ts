@@ -8,12 +8,14 @@ import {
   displayBookAtLayer,
   defaultValues,
   addLayer,
+  listLayers,
 } from "./cms";
 
 describe("cms", () => {
   beforeEach(async () => {
     const prisma = new PrismaClient();
     await prisma.book.deleteMany();
+    await prisma.layer.deleteMany();
   });
 
   describe("generating books", () => {
@@ -164,6 +166,33 @@ describe("cms", () => {
           values: ["apple"],
         })
       ).rejects.toThrow("Book not found");
+    });
+  });
+  
+  describe("displaying layers", () => {
+    test("we can display various layers of a book", async () => {
+      // GIVEN we create a book
+      const bookId = await generateBook("My test book");
+
+      // WHEN we add a number layer
+      const v1 = await addLayer({
+        bookId,
+        layerName: "layer 1",
+        values: ["anchor"],
+      });
+
+      const v2 = await addLayer({
+        bookId,
+        layerName: "layer 2",
+        values: ["hotel"],
+      });
+
+      // THEN we can list all the layers for that book
+      await expect(listLayers(bookId)).resolves.toEqual([
+        { id: expect.any(Number), name: "default" },
+        { id: v1, name: "layer 1" },
+        { id: v2, name: "layer 2" },
+      ]);
     });
   });
 });

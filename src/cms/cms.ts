@@ -21,6 +21,9 @@ export async function listLayers(
       id: true,
       name: true,
     },
+    orderBy: {
+      id: "desc",
+    },
   });
 
   return layers;

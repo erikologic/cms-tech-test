@@ -219,9 +219,9 @@ describe("cms", () => {
 
       // THEN we can list all the layers for that book
       await expect(listLayers(bookId)).resolves.toEqual([
-        { id: expect.any(Number), name: "default" },
-        { id: v1, name: "layer 1" },
         { id: v2, name: "layer 2" },
+        { id: v1, name: "layer 1" },
+        { id: expect.any(Number), name: "default" },
       ]);
     });
   });

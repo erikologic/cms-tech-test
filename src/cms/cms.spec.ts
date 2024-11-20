@@ -33,10 +33,22 @@ describe("cms", () => {
         "A book with that name already exists"
       );
     });
+
+    test("book name must be decently sized", async () => {
+      const generateString = (length: number) =>
+        Array.from({ length }, () => "a").join("");
+      await expect(generateBook(generateString(4))).rejects.toThrow(
+        "Book name must be between 5 and 200 characters"
+      );
+
+      await expect(generateBook(generateString(201))).rejects.toThrow(
+        "Book name must be between 5 and 200 characters"
+      );
+    });
   });
 
   describe("adding layers", () => {
-    test("adding multiple layers will return the latest view selected", async () => {
+    test("we can add multiple layers and display a particular view", async () => {
       // GIVEN we create a book
       const bookId = await generateBook("My test book");
 
@@ -181,6 +193,31 @@ describe("cms", () => {
           values: ["apple"],
         })
       ).rejects.toThrow("Book not found");
+
+      await expect(displayBookAtLayer(123)).rejects.toThrow(
+        "Unable to solve the request for that book/layer combination"
+      );
+    });
+
+    test("layer number must be valid", async () => {
+      const bookId = await generateBook("My test book");
+      const layerNumber = await addLayer({
+        bookId,
+        layerName: "layer",
+        values: ["alpha", "beta", "gamma", "delta", "mike"],
+      });
+
+      const anotherBookId = await generateBook("Another book");
+
+      await expect(
+        displayBookAtLayer(anotherBookId, layerNumber)
+      ).rejects.toThrow(
+        "Unable to solve the request for that book/layer combination"
+      );
+
+      await expect(displayBookAtLayer(anotherBookId, -1)).rejects.toThrow(
+        "The layer number must be positive"
+      );
     });
 
     describe("layer name", () => {
@@ -200,7 +237,7 @@ describe("cms", () => {
   });
 
   describe("displaying layers", () => {
-    test("we can display various layers of a book", async () => {
+    test("we can list all the layers of a book", async () => {
       // GIVEN we create a book
       const bookId = await generateBook("My test book");
 
@@ -223,6 +260,10 @@ describe("cms", () => {
         { id: v1, name: "layer 1" },
         { id: expect.any(Number), name: "default" },
       ]);
+    });
+
+    test("book must be existing", async () => {
+      await expect(listLayers(123)).rejects.toThrow("Book not found");
     });
   });
 });

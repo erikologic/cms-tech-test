@@ -26,6 +26,10 @@ export async function listLayers(
     },
   });
 
+  if (layers.length === 0) {
+    // Assuming we always have at least one layer per book
+    throw new Error("Book not found");
+  }
   return layers;
 }
 
@@ -87,6 +91,9 @@ export async function displayBookAtLayer(
   bookId: number,
   layerNumber?: number
 ): Promise<string[]> {
+  if (layerNumber && layerNumber < 0)
+    throw new Error("The layer number must be positive");
+
   const layers = await prisma.layer.findMany({
     where: {
       bookId,
@@ -99,9 +106,11 @@ export async function displayBookAtLayer(
     },
   });
 
-  // TODO add test
   if (layers.length === 0) {
-    throw new Error("Book has no layers");
+    // Would be good to improve
+    throw new Error(
+      "Unable to solve the request for that book/layer combination"
+    );
   }
 
   const letter2wordPairs: [string, string][] = layers
@@ -113,6 +122,10 @@ export async function displayBookAtLayer(
 }
 
 export async function generateBook(name: string): Promise<number> {
+  if (name.length < 5 || name.length > 200) {
+    throw new Error("Book name must be between 5 and 200 characters");
+  }
+
   let book;
   try {
     book = await prisma.book.create({

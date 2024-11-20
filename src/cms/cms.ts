@@ -2,13 +2,36 @@ import { PrismaClient } from "@prisma/client";
 
 type Book = string[];
 
-const prisma = new PrismaClient();
+export const defaultValues: Book = [
+  "apple",
+  "banana",
+  "cat",
+  "dog",
+  "elephant",
+  "fox",
+  "goat",
+  "horse",
+  "iguana",
+  "jaguar",
+  "kangaroo",
+  "lion",
+  "monkey",
+  "newt",
+  "octopus",
+  "penguin",
+  "quail",
+  "rabbit",
+  "snake",
+  "tiger",
+  "unicorn",
+  "vulture",
+  "whale",
+  "x-ray fish",
+  "yak",
+  "zebra",
+];
 
-interface AddLayerParams {
-  bookId: number;
-  layerName: string;
-  values: string[];
-}
+const prisma = new PrismaClient();
 
 export async function listLayers(
   bookId: number
@@ -52,6 +75,12 @@ function validateLayerName(layerName: string) {
   }
 }
 
+interface AddLayerParams {
+  bookId: number;
+  layerName: string;
+  values: string[];
+}
+
 export async function addLayer({
   bookId,
   layerName,
@@ -87,10 +116,15 @@ export async function addLayer({
   return layer.id;
 }
 
-export async function displayBookAtLayer(
-  bookId: number,
-  layerNumber?: number
-): Promise<string[]> {
+interface DisplayBookAtLayerParams {
+  bookId: number;
+  layerNumber?: number;
+}
+
+export async function displayBookAtLayer({
+  bookId,
+  layerNumber,
+}: DisplayBookAtLayerParams): Promise<string[]> {
   if (layerNumber && layerNumber < 0)
     throw new Error("The layer number must be positive");
 
@@ -150,32 +184,3 @@ export async function generateBook(name: string): Promise<number> {
   }
   return book.id;
 }
-
-export const defaultValues: Book = [
-  "apple",
-  "banana",
-  "cat",
-  "dog",
-  "elephant",
-  "fox",
-  "goat",
-  "horse",
-  "iguana",
-  "jaguar",
-  "kangaroo",
-  "lion",
-  "monkey",
-  "newt",
-  "octopus",
-  "penguin",
-  "quail",
-  "rabbit",
-  "snake",
-  "tiger",
-  "unicorn",
-  "vulture",
-  "whale",
-  "x-ray fish",
-  "yak",
-  "zebra",
-];

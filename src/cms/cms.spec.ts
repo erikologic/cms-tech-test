@@ -22,7 +22,7 @@ describe("cms", () => {
     test("generating a book return the default book", async () => {
       const name = "My test book";
       const bookId = await generateBook(name);
-      const book = await displayBookAtLayer(bookId);
+      const book = await displayBookAtLayer({ bookId });
       expect(book).toEqual(defaultValues);
     });
 
@@ -85,11 +85,11 @@ describe("cms", () => {
           Object.fromEntries(arr.map((value) => [value[0], value]))
         );
 
-      expect(await displayBookAtLayer(bookId, v2)).toEqual(
+      expect(await displayBookAtLayer({ bookId, layerNumber: v2 })).toEqual(
         merge([...defaultValues, "anchor", "banana", "hockey"])
       );
 
-      expect(await displayBookAtLayer(bookId, v3)).toEqual(
+      expect(await displayBookAtLayer({ bookId, layerNumber: v3 })).toEqual(
         merge([
           ...defaultValues,
           "anchor",
@@ -102,7 +102,7 @@ describe("cms", () => {
         ])
       );
 
-      expect(await displayBookAtLayer(bookId, v4)).toEqual(
+      expect(await displayBookAtLayer({ bookId, layerNumber: v4 })).toEqual(
         merge([
           ...defaultValues,
           "hockey",
@@ -134,9 +134,11 @@ describe("cms", () => {
         "jolly",
         "mint",
       ]);
-      expect(await displayBookAtLayer(bookId, v5)).toEqual(latest);
+      expect(await displayBookAtLayer({ bookId, layerNumber: v5 })).toEqual(
+        latest
+      );
       // if no layer is specified, the latest layer is returned
-      expect(await displayBookAtLayer(bookId)).toEqual(latest);
+      expect(await displayBookAtLayer({ bookId })).toEqual(latest);
     });
 
     describe("layer values", () => {
@@ -194,7 +196,7 @@ describe("cms", () => {
         })
       ).rejects.toThrow("Book not found");
 
-      await expect(displayBookAtLayer(123)).rejects.toThrow(
+      await expect(displayBookAtLayer({ bookId: 123 })).rejects.toThrow(
         "Unable to solve the request for that book/layer combination"
       );
     });
@@ -210,14 +212,14 @@ describe("cms", () => {
       const anotherBookId = await generateBook("Another book");
 
       await expect(
-        displayBookAtLayer(anotherBookId, layerNumber)
+        displayBookAtLayer({ bookId: anotherBookId, layerNumber })
       ).rejects.toThrow(
         "Unable to solve the request for that book/layer combination"
       );
 
-      await expect(displayBookAtLayer(anotherBookId, -1)).rejects.toThrow(
-        "The layer number must be positive"
-      );
+      await expect(
+        displayBookAtLayer({ bookId, layerNumber: -1 })
+      ).rejects.toThrow("The layer number must be positive");
     });
 
     describe("layer name", () => {

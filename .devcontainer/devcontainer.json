@@ -2,13 +2,10 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
 	"name": "Node.js & TypeScript",
-
-
 	// https://containers.dev/guide/dockerfile
 	"dockerComposeFile": "docker-compose.yml",
-    "service": "devcontainer",
-    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-	
+	"service": "devcontainer",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	// https://stackoverflow.com/questions/73676584/sharing-ssh-credentials-with-dev-container-in-vscode
 	"mounts": [
 		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached"
@@ -19,10 +16,10 @@
 			"onAutoForward": "openPreview"
 		}
 	},
-
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [3000],
-
+	"forwardPorts": [
+		3000
+	],
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		// To run Sonarlint
@@ -31,12 +28,12 @@
 		},
 		"ghcr.io/devcontainers/features/git-lfs:1": {}
 	},
-
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "npm install",
-	"updateContentCommand": "npm install",
+	"containerEnv": {
+		"DATABASE_URL": "postgresql://postgres:password@localhost:5432/db"
+	},
+	"updateContentCommand": "npm install && npm exec prisma migrate dev --name init",
 	"postAttachCommand": "npm run dev",
-
+	
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
@@ -69,7 +66,8 @@
 				"esbenp.prettier-vscode",
 				"timonwong.shellcheck",
 				"ms-azuretools.vscode-docker",
-				"Orta.vscode-jest"
+				"Orta.vscode-jest",
+				"Prisma.prisma"
 			]
 		}
 	}

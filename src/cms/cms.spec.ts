@@ -34,21 +34,94 @@ describe("cms", () => {
   });
 
   describe("adding layers", () => {
-    test("adding a layer will update the book", async () => {
+    test("adding multiple layers will return the latest view selected", async () => {
       // GIVEN we create a book
       const bookId = await generateBook("My test book");
 
-      // WHEN we add a layer
-      const layerNumber = await addLayer({
+      // WHEN we add a number layer
+      const v2 = await addLayer({
         bookId,
-        layerName: "next layer",
-        values: ["anchor"],
+        layerName: "layer 2",
+        values: ["anchor", "hockey"],
       });
 
-      // THEN the book will have the new layer
-      const bookLayers = await displayBookAtLayer(bookId, layerNumber);
-      expect(bookLayers[0]).toEqual("anchor");
-      expect(bookLayers[1]).toEqual("banana");
+      const v3 = await addLayer({
+        bookId,
+        layerName: "layer 3",
+        values: ["football", "tango", "zorro", "berry"],
+      });
+
+      const v4 = await addLayer({
+        bookId,
+        layerName: "layer 4",
+        values: ["alpha", "beta", "gamma", "delta"],
+      });
+
+      const v5 = await addLayer({
+        bookId,
+        layerName: "layer 4",
+        values: ["son", "romeo", "jolly", "mike"],
+      });
+
+      // THEN we can see the book at each layer
+
+      // utility function to return the latest word for each letter
+      const merge = (arr: string[]) =>
+        Object.values(
+          Object.fromEntries(arr.map((value) => [value[0], value]))
+        );
+
+      expect(await displayBookAtLayer(bookId, v2)).toEqual(
+        merge([...defaultValues, "anchor", "banana", "hockey"])
+      );
+
+      expect(await displayBookAtLayer(bookId, v3)).toEqual(
+        merge([
+          ...defaultValues,
+          "anchor",
+          "banana",
+          "hockey",
+          "football",
+          "tango",
+          "zorro",
+          "berry",
+        ])
+      );
+
+      expect(await displayBookAtLayer(bookId, v4)).toEqual(
+        merge([
+          ...defaultValues,
+          "hockey",
+          "football",
+          "tango",
+          "zorro",
+          "berry",
+          "alpha",
+          "beta",
+          "gamma",
+          "delta",
+        ])
+      );
+
+      const latest = merge([
+        ...defaultValues,
+        "hockey",
+        "football",
+        "tango",
+        "zorro",
+        "berry",
+        "alpha",
+        "beta",
+        "gamma",
+        "delta",
+        "son",
+        "romeo",
+        "jolly",
+        "mike",
+      ]);
+      expect(await displayBookAtLayer(bookId, v5)).toEqual(latest);
+      // if no layer is specified, the latest layer is returned
+      expect(await displayBookAtLayer(bookId)).toEqual(latest);
     });
 
     test("a new layer must contain between 1 an 26 values", async () => {
@@ -80,9 +153,7 @@ describe("cms", () => {
           layerName: "next layer",
           values: ["", "apple", "1232", "b33z", "ski-jumping", "w@rd"],
         })
-      ).rejects.toThrow(
-        'Invalid words in values: "", "1232", "b33z", "w@rd"'
-      );
+      ).rejects.toThrow('Invalid words in values: "", "1232", "b33z", "w@rd"');
     });
   });
 });

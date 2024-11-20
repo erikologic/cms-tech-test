@@ -1,0 +1,70 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+	"name": "Node.js & TypeScript",
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+	"mounts": [
+		// https://stackoverflow.com/questions/73676584/sharing-ssh-credentials-with-dev-container-in-vscode
+		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached"
+	],
+	"portsAttributes": {
+		"3000": {
+			"label": "app",
+			"onAutoForward": "openPreview"
+		}
+	},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [3000],
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	"features": {
+		// To run Sonarlint
+		"ghcr.io/devcontainers/features/java:1": {
+			"version": "17"
+		},
+		"ghcr.io/devcontainers/features/git-lfs:1": {}
+	},
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "npm install",
+	"updateContentCommand": "npm install",
+	"postAttachCommand": "npm run dev",
+
+	// Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"bierner.markdown-mermaid",
+				"bradlc.vscode-tailwindcss",
+				"DavidAnson.vscode-markdownlint",
+				"dbaeumer.vscode-eslint",
+				"GitHub.copilot-chat",
+				"GitHub.copilot",
+				"github.vscode-github-actions",
+				"Gruntfuggly.todo-tree",
+				"mhutchie.git-graph",
+				"moalamri.inline-fold",
+				"ms-playwright.playwright",
+				"rangav.vscode-thunder-client",
+				"redhat.vscode-yaml",
+				"rockingskier.copy-copy-paste",
+				"SimonSiefke.svg-preview",
+				"VisualStudioExptTeam.intellicode-api-usage-examples",
+				"wix.vscode-import-cost",
+				"YoavBls.pretty-ts-errors",
+				"vitest.explorer",
+				"VisualStudioExptTeam.vscodeintellicode",
+				"eamodio.gitlens",
+				"toba.vsfire",
+				"ms-vsliveshare.vsliveshare",
+				"ryanrosello-og.playwright-vscode-trace-viewer",
+				"rvest.vs-code-prettier-eslint",
+				"esbenp.prettier-vscode",
+				"timonwong.shellcheck"
+			]
+		}
+	}
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}

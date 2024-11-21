@@ -31,7 +31,7 @@
 	"containerEnv": {
 		"DATABASE_URL": "postgresql://postgres:postgres@db:5432/db"
 	},
-	"updateContentCommand": "./setup.sh",
+	"postCreateCommand": "./setup.sh",
 	
 	// Configure tool-specific properties.
 	"customizations": {

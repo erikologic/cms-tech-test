@@ -2,7 +2,6 @@
  * @jest-environment node
  */
 
-import { PrismaClient } from "@prisma/client";
 import {
   generateBook,
   displayBookAtLayer,
@@ -11,26 +10,25 @@ import {
   listLayers,
   createUser,
 } from "./cms";
+import { v4 as uuidv4 } from "uuid";
+
+const withEntropy = (s: string) => `${s}-${uuidv4()}`;
 
 const generateString = (length: number) =>
   Array.from({ length }, () => "a").join("");
 const lengthyWord = generateString(51);
 
 describe("cms", () => {
-  beforeEach(async () => {
-    const prisma = new PrismaClient();
-    await prisma.user.deleteMany();
-    await prisma.book.deleteMany();
-    await prisma.layer.deleteMany();
-  });
-
   describe("one user", () => {
     let userId: number;
-    beforeEach(async () => {
-      userId = await createUser("alice");
+    beforeAll(async () => {
+      userId = await createUser(withEntropy("alice"));
 
-      const bob = await createUser("bob");
-      const bobBook = await generateBook({ name: "Bob's book", userId: bob });
+      const bob = await createUser(withEntropy("bob"));
+      const bobBook = await generateBook({
+        name: withEntropy("Bob's book"),
+        userId: bob,
+      });
       await addLayer({
         userId: bob,
         bookId: bobBook,
@@ -41,14 +39,16 @@ describe("cms", () => {
 
     describe("generating books", () => {
       test("generating a book return the default book", async () => {
-        const name = "My test book";
-        const bookId = await generateBook({ name, userId });
+        const bookId = await generateBook({
+          name: withEntropy("My test book"),
+          userId,
+        });
         const book = await displayBookAtLayer({ userId, bookId });
         expect(book).toEqual(defaultValues);
       });
 
       test("2 books cannot have the same name", async () => {
-        const name = "My test book";
+        const name = withEntropy("My test book");
         await generateBook({ name, userId });
         await expect(generateBook({ name, userId })).rejects.toThrow(
           "A book with that name already exists"
@@ -69,7 +69,10 @@ describe("cms", () => {
     describe("adding layers", () => {
       test("we can add multiple layers and display a particular view", async () => {
         // GIVEN we create a book
-        const bookId = await generateBook({ name: "My test book", userId });
+        const bookId = await generateBook({
+          name: withEntropy("My test book"),
+          userId,
+        });
 
         // WHEN we add a number layer
         const v2 = await addLayer({
@@ -170,7 +173,10 @@ describe("cms", () => {
 
       describe("layer values", () => {
         test("a new layer must contain between 1 an 26 values", async () => {
-          const bookId = await generateBook({ name: "My test book", userId });
+          const bookId = await generateBook({
+            name: withEntropy("My test book"),
+            userId,
+          });
 
           await expect(
             addLayer({
@@ -192,7 +198,10 @@ describe("cms", () => {
         });
 
         test("layer values must be a valid word", async () => {
-          const bookId = await generateBook({ name: "My test book", userId });
+          const bookId = await generateBook({
+            name: withEntropy("My test book"),
+            userId,
+          });
 
           await expect(
             addLayer({
@@ -233,7 +242,10 @@ describe("cms", () => {
       });
 
       test("layer number must be valid", async () => {
-        const bookId = await generateBook({ name: "My test book", userId });
+        const bookId = await generateBook({
+          name: withEntropy("My test book"),
+          userId,
+        });
         const layerNumber = await addLayer({
           userId,
           bookId,
@@ -242,7 +254,7 @@ describe("cms", () => {
         });
 
         const anotherBookId = await generateBook({
-          name: "Another book",
+          name: withEntropy("Another book"),
           userId,
         });
 
@@ -259,10 +271,15 @@ describe("cms", () => {
 
       describe("layer name", () => {
         const wrongNames = ["", "w@rd", generateString(51)];
+
         test.each(wrongNames)(
           `"%s" is not a valid layer name`,
           async (name) => {
-            const bookId = await generateBook({ name: "My test book", userId });
+            const bookId = await generateBook({
+              name: withEntropy("My test book"),
+              userId,
+            });
+
             await expect(
               addLayer({
                 userId,
@@ -279,8 +296,10 @@ describe("cms", () => {
     describe("displaying layers", () => {
       test("we can list all the layers of a book", async () => {
         // GIVEN we create a book
-        const bookId = await generateBook({ name: "My test book", userId });
-
+        const bookId = await generateBook({
+          name: withEntropy("My test book"),
+          userId,
+        });
         // WHEN we add a number layer
         const v1 = await addLayer({
           userId,
@@ -315,12 +334,12 @@ describe("cms", () => {
   describe("multiple users", () => {
     test("users cannot operate on other users' books", async () => {
       // GIVEN 2 users
-      const aliceId = await createUser("alice");
-      const bobId = await createUser("bob");
+      const aliceId = await createUser(withEntropy("alice"));
+      const bobId = await createUser(withEntropy("bob"));
 
       // WHEN alice creates a book
       const bookId = await generateBook({
-        name: "My test book",
+        name: withEntropy("My test book"),
         userId: aliceId,
       });
 
@@ -356,8 +375,9 @@ describe("cms", () => {
       );
 
       test("user name must be unique", async () => {
-        await createUser("alice");
-        await expect(createUser("alice")).rejects.toThrow(
+        const userName = withEntropy("alice");
+        await createUser(userName);
+        await expect(createUser(userName)).rejects.toThrow(
           "A user with that name already exists"
         );
       });

@@ -1,28 +1,33 @@
 import { test, expect } from "@playwright/test";
 
+import { v4 as uuidv4 } from "uuid";
+
+const withEntropy = (s: string) => `${s}-${uuidv4()}`;
+
 test("webapp", async ({ page }) => {
   // GIVEN I load the page
   await page.goto("/");
 
   // AND I signup
   await page.getByRole("link", { name: "Sign up" }).click();
-  await page.getByPlaceholder("name").fill("Alice");
+  await page.getByPlaceholder("email").fill(withEntropy("alice"));
 
   // THEN I'm told I have no books yet
   await expect(page.getByText("No books yet")).toBeVisible();
 
   // WHEN I add a book
   await page.getByRole("button", { name: "Add book" }).click();
-  await page.getByPlaceholder("title").fill("Alice's Adventures in Wonderland");
+  const bookTitle = withEntropy("Alice's Adventures in Wonderland");
+  await page.getByPlaceholder("title").fill(withEntropy(bookTitle));
 
   // THEN I see the book in the list
   await expect(
-    page.getByRole("cell", { name: "Alice's Adventures in Wonderland" })
+    page.getByRole("cell", { name: bookTitle })
   ).toBeVisible();
 
   // AND I can display see the book has been prepolulated with a default layer
   await page
-    .getByRole("link", { name: "Alice's Adventures in Wonderland" })
+    .getByRole("link", { name: bookTitle })
     .click();
   await expect(page.getByRole("cell", { name: "default" })).toBeVisible();
 
@@ -75,7 +80,7 @@ test("webapp", async ({ page }) => {
 
   // WHEN I open the content at Layer 2
   await page
-    .getByRole("link", { name: "Alice's Adventures in Wonderland" })
+    .getByRole("link", { name: bookTitle })
     .click();
   await page.getByRole("link", { name: "Layer 2" }).click();
   {

@@ -8,9 +8,16 @@ test("webapp", async ({ page }) => {
   // GIVEN I load the page
   await page.goto("/");
 
-  // AND I signup
-  await page.getByRole("link", { name: "Sign up" }).click();
-  await page.getByPlaceholder("email").fill(withEntropy("alice"));
+  // When I sign up
+  const user = withEntropy("alice");
+  await page.getByText("Sign up").click();
+  await page.getByLabel("Name").fill(user);
+  await page.getByText("Submit").click();
+
+  // AND I sign in
+  await page.getByText("Sign in").click();
+  await page.getByLabel("Name").fill(user);
+  await page.getByText("Submit").click();
 
   // THEN I'm told I have no books yet
   await expect(page.getByText("No books yet")).toBeVisible();
@@ -18,17 +25,13 @@ test("webapp", async ({ page }) => {
   // WHEN I add a book
   await page.getByRole("button", { name: "Add book" }).click();
   const bookTitle = withEntropy("Alice's Adventures in Wonderland");
-  await page.getByPlaceholder("title").fill(withEntropy(bookTitle));
+  await page.getByLabel("title").fill(withEntropy(bookTitle));
 
   // THEN I see the book in the list
-  await expect(
-    page.getByRole("cell", { name: bookTitle })
-  ).toBeVisible();
+  await expect(page.getByRole("cell", { name: bookTitle })).toBeVisible();
 
   // AND I can display see the book has been prepolulated with a default layer
-  await page
-    .getByRole("link", { name: bookTitle })
-    .click();
+  await page.getByRole("link", { name: bookTitle }).click();
   await expect(page.getByRole("cell", { name: "default" })).toBeVisible();
 
   // AND I can see the book content
@@ -40,25 +43,25 @@ test("webapp", async ({ page }) => {
         expect(page.getByRole("cell", { name: layerValue })).toBeVisible()
       )
     );
-    // can I count that there are 26 cells?
+    // TODO count 26 values
   }
 
   // WHEN I add a Layer "Layer 2"
   await page.getByRole("button", { name: "Add Layer" }).click();
-  await page.getByPlaceholder("name").fill("Layer 2");
+  await page.getByLabel("name").fill("Layer 2");
   await page.getByRole("button", { name: "Add value" }).click();
-  await page.getByPlaceholder("value").fill("alpha");
+  await page.getByLabel("value").fill("alpha");
   await page.getByRole("button", { name: "Add value" }).click();
-  await page.getByPlaceholder("value").fill("beta");
+  await page.getByLabel("value").fill("beta");
   await page.getByRole("button", { name: "Save" }).click();
 
   // AND another Layer "Layer 3"
   await page.getByRole("button", { name: "Add Layer" }).click();
-  await page.getByPlaceholder("name").fill("Layer 3");
+  await page.getByLabel("name").fill("Layer 3");
   await page.getByRole("button", { name: "Add value" }).click();
-  await page.getByPlaceholder("value").fill("bravo");
+  await page.getByLabel("value").fill("bravo");
   await page.getByRole("button", { name: "Add value" }).click();
-  await page.getByPlaceholder("value").fill("charlie");
+  await page.getByLabel("value").fill("charlie");
   await page.getByRole("button", { name: "Save" }).click();
 
   // THEN I can see the Layers in the book
@@ -79,9 +82,7 @@ test("webapp", async ({ page }) => {
   );
 
   // WHEN I open the content at Layer 2
-  await page
-    .getByRole("link", { name: bookTitle })
-    .click();
+  await page.getByRole("link", { name: bookTitle }).click();
   await page.getByRole("link", { name: "Layer 2" }).click();
   {
     const layerValues = ["alpha", "beta", "cat"];

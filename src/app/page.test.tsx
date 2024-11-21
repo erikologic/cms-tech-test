@@ -6,7 +6,7 @@ describe('Page', () => {
   it('renders a heading', () => {
     render(<Page />)
  
-    const heading = screen.getByText(/Get started/)
+    const heading = screen.getByText(/Abecederies CMS/)
  
     expect(heading).toBeInTheDocument()
   })

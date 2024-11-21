@@ -239,3 +239,15 @@ export async function createUser(name: string): Promise<number> {
   }
   return user.id;
 }
+
+export async function getUserId(name: string): Promise<number> {
+  const user = await prisma.user.findUnique({
+    where: {
+      name,
+    },
+  });
+  if (!user) {
+    throw new Error("User not found");
+  }
+  return user.id;
+}

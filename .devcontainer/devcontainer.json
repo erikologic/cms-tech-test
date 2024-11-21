@@ -31,12 +31,42 @@
 	"containerEnv": {
 		"DATABASE_URL": "postgresql://postgres:password@localhost:5432/db"
 	},
-	"updateContentCommand": "npm install && npm run prisma:migrate -- --name init",
-	"postAttachCommand": "npm run dev",
+	"updateContentCommand": "./setup.sh",
 	
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
+			"settings": {
+				"tasks": {
+				  "version": "2.0.0",
+				  "tasks": [
+					{
+						"label": "dev server",
+						"type": "shell",
+						"command": "npm run dev",
+						"runOptions": {
+							"runOn": "folderOpen"
+						}
+					},
+					{
+						"label": "test watch",
+						"type": "shell",
+						"command": "npm run test:watch",
+						"runOptions": {
+							"runOn": "folderOpen"
+						}
+					},
+					{
+						"label": "browser test UI",
+						"type": "shell",
+						"command": "npm run test:e2e:ui",
+						"runOptions": {
+							"runOn": "folderOpen"
+						}
+					}
+				  ]
+				}
+			},
 			"extensions": [
 				"bierner.markdown-mermaid",
 				"bradlc.vscode-tailwindcss",

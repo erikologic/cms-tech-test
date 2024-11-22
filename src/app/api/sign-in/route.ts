@@ -16,10 +16,13 @@ export async function POST(request: Request) {
       status: 500,
     });
   }
-  return new Response(null, {
-    status: 204,
-    headers: {
-      "Set-Cookie": `token=${token}; Path=/; HttpOnly`,
-    },
-  });
+  return Response.json(
+    { data: { token } },
+    {
+      status: 200,
+      headers: {
+        "Set-Cookie": `token=${token}; Path=/; HttpOnly`,
+      },
+    }
+  );
 }

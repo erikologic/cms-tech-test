@@ -11,6 +11,7 @@ import {
   createUser,
 } from "./cms";
 import { v4 as uuidv4 } from "uuid";
+import { listBooks } from "./cms";
 
 const withEntropy = (s: string) => `${s}-${uuidv4()}`;
 
@@ -63,6 +64,36 @@ describe("cms", () => {
         await expect(
           generateBook({ name: generateString(201), userId })
         ).rejects.toThrow("Book name must be between 5 and 200 characters");
+      });
+    });
+
+    describe("listing books", () => {
+      test("we can list all books for a user", async () => {
+        // GIVEN a new user
+        const userId = await createUser(withEntropy("alice"));
+
+        // THEN we should see no books
+        await expect(listBooks({ userId })).resolves.toEqual([]);
+
+        // GIVEN we create multiple books
+        const book1 = await generateBook({
+          name: withEntropy("Book 1"),
+          userId,
+        });
+
+        const book2 = await generateBook({
+          name: withEntropy("Book 2"),
+          userId,
+        });
+
+        // WHEN we list all books for the user
+        const books = await listBooks({ userId });
+
+        // THEN we should see all the books created by the user
+        expect(books).toEqual([
+          { id: book2, name: expect.stringContaining("Book 2") },
+          { id: book1, name: expect.stringContaining("Book 1") },
+        ]);
       });
     });
 

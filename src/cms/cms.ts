@@ -33,6 +33,27 @@ export const defaultValues: Book = [
 
 const prisma = new PrismaClient();
 
+interface ListBooksProps {
+  userId: number;
+}
+export async function listBooks(
+  { userId }: ListBooksProps
+): Promise<{ id: number; name: string }[]> {
+  const books = await prisma.book.findMany({
+    where: {
+      userId,
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+    orderBy: {
+      id: "desc",
+    },
+  });
+  return books;
+}
+
 interface ListLayersParams {
   bookId: number;
   userId: number;

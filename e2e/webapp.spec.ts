@@ -54,11 +54,12 @@ test("webapp", async ({ page }) => {
   await page.getByText("Back to Layers").click();
   await page.getByText("Add layer").click();
 
+  await page.getByText("Add value").click();
   await page.getByLabel("Name").fill("Layer 2");
   await page.getByLabel("Value").fill("alpha");
-  // await page.getByText("Add value").click();
-  // await page.getByLabel("Value").fill("beta");
-  // await page.getByText("Save").click();
+  await page.getByText("Add value").click();
+  await page.getByLabel("Value").nth(1).fill("beta");
+  await page.getByText("Save").click();
 
   // // AND another Layer "Layer 3"
   // await page.getByText("Add layer" ).click();

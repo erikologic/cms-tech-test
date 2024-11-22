@@ -50,23 +50,23 @@ test("webapp", async ({ page }) => {
     // TODO count 26 values
   }
 
-  // // WHEN I add a Layer "Layer 2"
-  // await page.getByRole("button", { name: "Add Layer" }).click();
-  // await page.getByLabel("name").fill("Layer 2");
-  // await page.getByRole("button", { name: "Add value" }).click();
-  // await page.getByLabel("value").fill("alpha");
-  // await page.getByRole("button", { name: "Add value" }).click();
-  // await page.getByLabel("value").fill("beta");
-  // await page.getByRole("button", { name: "Save" }).click();
+  // WHEN I add a Layer "Layer 2"
+  await page.getByText("Back to Layers").click();
+  await page.getByText("Add layer").click();
+
+  await page.getByLabel("Name").fill("Layer 2");
+  await page.getByLabel("Value").fill("alpha");
+  // await page.getByText("Add value").click();
+  // await page.getByLabel("Value").fill("beta");
+  // await page.getByText("Save").click();
 
   // // AND another Layer "Layer 3"
-  // await page.getByRole("button", { name: "Add Layer" }).click();
-  // await page.getByLabel("name").fill("Layer 3");
-  // await page.getByRole("button", { name: "Add value" }).click();
-  // await page.getByLabel("value").fill("bravo");
-  // await page.getByRole("button", { name: "Add value" }).click();
-  // await page.getByLabel("value").fill("charlie");
-  // await page.getByRole("button", { name: "Save" }).click();
+  // await page.getByText("Add layer" ).click();
+  // await page.getByLabel("Name").fill("Layer 3");
+  // await page.getByLabel("Value").fill("bravo");
+  // await page.getByText("Add value" ).click();
+  // await page.getByLabel("Value").fill("charlie");
+  // await page.getByText("Save" ).click();
 
   // // THEN I can see the Layers in the book
   // await Promise.all(
@@ -75,7 +75,7 @@ test("webapp", async ({ page }) => {
   //   )
   // );
   // // WHEN I want to see the latest book content
-  // await page.getByRole("button", { name: "Latest version" }).click();
+  // await page.getByText("Latest version" ).click();
 
   // // THEN I see the content at "Layer 3"
 

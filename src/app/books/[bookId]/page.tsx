@@ -34,6 +34,7 @@ export default async function BookPage({params}: {
                 ))}
             </ul>
             <Link href={`/books/${bookId}/layers/latest`}>Show latest book version</Link>
+            <Link href={`/books/${bookId}/layers/new`}>Add layer</Link>
         </div>
     );
 };

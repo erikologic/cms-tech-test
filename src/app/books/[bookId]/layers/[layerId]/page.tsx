@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { cookies } from 'next/headers'
 import { displayBookWithToken } from "@/app/api/display-book-at-layer/route";
+import Link from "next/link";
 
 export default async function LayersPage({params}: {
     params: Promise<{ layerId: string, bookId: string }>
@@ -21,6 +22,7 @@ export default async function LayersPage({params}: {
 
     return (
         <div>
+            <Link href={`/books/${bookId}`}>Back to Layers</Link>
             <h1>Values:</h1>
             <ul>
                 {values.map((value) => (

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import AddBookForm from "./form";
 import { cookies } from 'next/headers'
 
-export default async function SignIn() {
+export default async function NewBook() {
 
   const cookieStore = await cookies()
   const token = cookieStore.get('token')?.value

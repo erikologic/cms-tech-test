@@ -36,9 +36,9 @@ const prisma = new PrismaClient();
 interface ListBooksProps {
   userId: number;
 }
-export async function listBooks(
-  { userId }: ListBooksProps
-): Promise<{ id: number; name: string }[]> {
+export async function listBooks({
+  userId,
+}: ListBooksProps): Promise<{ id: number; name: string }[]> {
   const books = await prisma.book.findMany({
     where: {
       userId,
@@ -52,6 +52,30 @@ export async function listBooks(
     },
   });
   return books;
+}
+
+interface GetBookProps {
+  bookId: number;
+  userId: number;
+}
+export async function getBook({
+  userId,
+  bookId,
+}: GetBookProps): Promise<{ id: number; name: string }> {
+  const book = await prisma.book.findFirst({
+    where: {
+      id: bookId,
+      userId,
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+  if (!book) {
+    throw new Error("Book not found");
+  }
+  return book;
 }
 
 interface ListLayersParams {

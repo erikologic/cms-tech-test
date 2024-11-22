@@ -35,10 +35,10 @@ test("webapp", async ({ page }) => {
 
   // AND I can display see the book has been prepolulated with a default layer
   await page.getByText(bookTitle).click();
-  await expect(page.getByRole("cell", { name: "default" })).toBeVisible();
+  await expect(page.getByText("default")).toBeVisible();
 
-  // // AND I can see the book content
-  // await page.getByRole("cell", { name: "Latest version" }).click();
+  // AND I can see the book content
+  await page.getByText("Show latest book version").click();
   // {
   //   const layerValues = ["alice", "bob"];
   //   await Promise.all(

@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form';
+import { addLayerPayloadSchema } from '@/app/api/add-layer/route';
 
 type Inputs = {
 	name: string;
@@ -33,9 +34,15 @@ export default function AddLayerForm({ token, bookId }: AddLayerFormProps) {
 	});
 
 	const onSubmit: SubmitHandler<Inputs> = data => {
+		console.log(data);
+		const payload = addLayerPayloadSchema.parse({
+			layerName: data.name,
+			bookId,
+			values: data.values.map(({ value }) => value),
+		})
 		fetch('/api/add-layer', {
 			method: 'POST',
-			body: JSON.stringify(data),
+			body: JSON.stringify(payload),
 			headers: {
 				'Content-Type': 'application/json',
 				Authorization: token,

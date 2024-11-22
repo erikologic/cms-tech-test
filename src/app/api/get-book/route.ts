@@ -1,3 +1,4 @@
+import { type NextRequest } from 'next/server';
 import { getBook } from '@/cms/cms';
 
 function decode(token: string | null): number {
@@ -8,8 +9,6 @@ export async function getBookWithToken(token: string | null, bookId: number) {
 	const userId = decode(token);
 	return await getBook({ userId, bookId });
 }
-
-import { type NextRequest } from 'next/server';
 
 export async function GET(request: NextRequest) {
 	let book;

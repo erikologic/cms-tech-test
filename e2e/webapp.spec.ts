@@ -40,7 +40,7 @@ test('webapp', async ({ page }) => {
 
 	// AND I can see the book content
 	await page.getByText('Show latest book version').click();
-	await expect(page.getByText('Values')).toBeVisible();
+	await expect(page.getByText('Book content')).toBeVisible();
 	{
 		const layerValues = ['apple', 'banana'];
 		await Promise.all(

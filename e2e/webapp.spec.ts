@@ -7,6 +7,7 @@ const withEntropy = (s: string) => `${s}-${uuidv4()}`;
 test('webapp', async ({ page }) => {
 	// GIVEN I load the page
 	await page.goto('/');
+	await expect(page.getByText('CMS')).toBeVisible();
 
 	// When I sign up
 	const user = withEntropy('alice');
@@ -72,32 +73,36 @@ test('webapp', async ({ page }) => {
 	await page.getByLabel('Value').nth(1).fill('charlie');
 	await page.getByText('Save').click();
 
-	// // THEN I can see the Layers in the book
-	// await Promise.all(
-	//   ["Layer 3", "Layer 2"].map((LayerName) =>
-	//     expect(page.getByRole("cell", { name: LayerName })).toBeVisible()
-	//   )
-	// );
-	// // WHEN I want to see the latest book content
-	// await page.getByText("Latest version" ).click();
+	// THEN I can see the Layers in the book
+	await page.getByText('Back to Layers').click();
+	await Promise.all(
+		['Layer 3', 'Layer 2'].map(layerName =>
+			expect(page.getByText(layerName)).toBeVisible(),
+		),
+	);
 
-	// // THEN I see the content at "Layer 3"
+	// WHEN I want to see the latest book content
+	await page.getByText('Show latest book version').click();
 
-	// await Promise.all(
-	//   ["alpha", "bravo", "charlie", "dog"].map((layerValue) =>
-	//     expect(page.getByRole("cell", { name: layerValue })).toBeVisible()
-	//   )
-	// );
+	// THEN I see the content at "Layer 3"
+	await Promise.all(
+		['alpha', 'bravo', 'charlie', 'dog'].map(layerValue =>
+			expect(page.getByText(layerValue)).toBeVisible(),
+		),
+	);
 
-	// // WHEN I open the content at Layer 2
-	// await page.getByRole("link", { name: bookTitle }).click();
-	// await page.getByRole("link", { name: "Layer 2" }).click();
-	// {
-	//   const layerValues = ["alpha", "beta", "cat"];
-	//   await Promise.all(
-	//     layerValues.map((layerValue) =>
-	//       expect(page.getByRole("cell", { name: layerValue })).toBeVisible()
-	//     )
-	//   );
-	// }
+	// WHEN I open the content at Layer 2
+	await page.getByText('Back to Layers').click();
+	await page.getByText('Layer 2').click();
+	await Promise.all(
+		['alpha', 'beta', 'cat', 'dog'].map(layerValue =>
+			expect(page.getByText(layerValue)).toBeVisible(),
+		),
+	);
+
+	// AND I can log out
+	await page.getByText('Back to Layers').click();
+	await page.getByText('Back to Books').click();
+	await page.getByText('Sign out').click();
+	await expect(page.getByText('CMS')).toBeVisible();
 });

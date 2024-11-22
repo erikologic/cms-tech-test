@@ -1,15 +1,7 @@
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 import React from 'react';
-import { LinkButton } from './component/link-button';
+import { LinkButton } from '../component/link-button';
 
 export default async function Home() {
-	const cookieStore = await cookies();
-	const token = cookieStore.get('token')?.value;
-	if (token) {
-		redirect('/books');
-	}
-
 	return (
 		<>
 			<h1 className="text-balance py-6 text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">

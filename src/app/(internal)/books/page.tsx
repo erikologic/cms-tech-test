@@ -1,9 +1,9 @@
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { listBooksFromToken } from '../api/list-books/route';
-import { PageTitle } from '../component/page-title';
-import { LinkButton } from '../component/link-button';
+import { listBooksFromToken } from '../../api/list-books/route';
+import { PageTitle } from '../../component/page-title';
+import { LinkButton } from '../../component/link-button';
 
 const NoBooks = () => <p>No books yet!</p>;
 

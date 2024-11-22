@@ -1,4 +1,4 @@
-import { PageTitle } from '../component/page-title';
+import { PageTitle } from '../../component/page-title';
 import SignInForm from './form';
 
 export default function SignIn() {

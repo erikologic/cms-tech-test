@@ -39,15 +39,16 @@ test("webapp", async ({ page }) => {
 
   // AND I can see the book content
   await page.getByText("Show latest book version").click();
-  // {
-  //   const layerValues = ["alice", "bob"];
-  //   await Promise.all(
-  //     layerValues.map((layerValue) =>
-  //       expect(page.getByRole("cell", { name: layerValue })).toBeVisible()
-  //     )
-  //   );
-  //   // TODO count 26 values
-  // }
+  await expect(page.getByText("Values")).toBeVisible();
+  {
+    const layerValues = ["apple", "banana"];
+    await Promise.all(
+      layerValues.map((layerValue) =>
+        expect(page.getByText(layerValue)).toBeVisible()
+      )
+    );
+    // TODO count 26 values
+  }
 
   // // WHEN I add a Layer "Layer 2"
   // await page.getByRole("button", { name: "Add Layer" }).click();

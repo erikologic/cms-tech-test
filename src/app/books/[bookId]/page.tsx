@@ -5,7 +5,7 @@ import { listLayersFromToken } from "@/app/api/list-layers/route";
 import Link from "next/link";
 
 export default async function BookPage({params}: {
-    params: Promise<{ id: string }>
+    params: Promise<{ bookId: string }>
 }) {
 
     const cookieStore = await cookies()
@@ -15,16 +15,13 @@ export default async function BookPage({params}: {
         redirect("/sign-in");
     }
   
-    const bookId = Number((await params).id);
+    const bookId = Number((await params).bookId);
 
-    let book;
-    try {
-        book = await getBookWithToken(token, bookId);
-    } catch {
-        redirect("/404");
-    }
-
-    const layers = await listLayersFromToken(token, bookId);
+    const [book, layers] = await Promise.all([ 
+        getBookWithToken(token, bookId),
+        listLayersFromToken(token, bookId)
+    ]);
+    
     return (
         <div>
             <h1>Book Name: {book.name}</h1>

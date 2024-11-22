@@ -17,9 +17,7 @@
 		}
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [
-		3000, 5432
-	],
+	"forwardPorts": [3000, 5432],
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		// To run Sonarlint
@@ -32,39 +30,39 @@
 		"DATABASE_URL": "postgresql://postgres:postgres@db:5432/db"
 	},
 	"postCreateCommand": "./setup.sh",
-	
+
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
 			"settings": {
 				"tasks": {
-				  "version": "2.0.0",
-				  "tasks": [
-					{
-						"label": "dev server",
-						"type": "shell",
-						"command": "npm run dev",
-						"runOptions": {
-							"runOn": "folderOpen"
+					"version": "2.0.0",
+					"tasks": [
+						{
+							"label": "dev server",
+							"type": "shell",
+							"command": "npm run dev",
+							"runOptions": {
+								"runOn": "folderOpen"
+							}
+						},
+						{
+							"label": "test watch",
+							"type": "shell",
+							"command": "npm run test:watch",
+							"runOptions": {
+								"runOn": "folderOpen"
+							}
+						},
+						{
+							"label": "browser test UI",
+							"type": "shell",
+							"command": "npm run test:e2e:ui",
+							"runOptions": {
+								"runOn": "folderOpen"
+							}
 						}
-					},
-					{
-						"label": "test watch",
-						"type": "shell",
-						"command": "npm run test:watch",
-						"runOptions": {
-							"runOn": "folderOpen"
-						}
-					},
-					{
-						"label": "browser test UI",
-						"type": "shell",
-						"command": "npm run test:e2e:ui",
-						"runOptions": {
-							"runOn": "folderOpen"
-						}
-					}
-				  ]
+					]
 				}
 			},
 			"extensions": [

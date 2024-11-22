@@ -13,3 +13,7 @@ export const LinkButton = ({ href, children }: LinkButtonProps) => (
 		{children}
 	</Link>
 );
+
+export const NavBar = ({ children }: React.PropsWithChildren) => (
+	<nav className="mt-4 flex gap-4">{children}</nav>
+);

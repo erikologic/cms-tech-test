@@ -2,8 +2,8 @@ import { cookies } from 'next/headers';
 import { getBookWithToken } from '@/app/api/get-book/route';
 import { listLayersFromToken } from '@/app/api/list-layers/route';
 import Link from 'next/link';
-import { PageTitle } from '@/app/component/page-title';
-import { LinkButton } from '@/app/component/link-button';
+import { PageTitle } from '@/app/component/typography';
+import { LinkButton, NavBar } from '@/app/component/nav';
 
 export default async function BookPage({
 	params,
@@ -22,7 +22,7 @@ export default async function BookPage({
 
 	return (
 		<>
-			<nav className="mt-4 flex gap-4">
+			<NavBar>
 				<LinkButton href={`/books/`}>Back to Books</LinkButton>
 				<LinkButton href={`/books/${bookId}/layers/latest`}>
 					Show latest book version
@@ -30,7 +30,7 @@ export default async function BookPage({
 				<LinkButton href={`/books/${bookId}/layers/new`}>
 					Add layer
 				</LinkButton>
-			</nav>
+			</NavBar>
 
 			<PageTitle>Book: {book.name}</PageTitle>
 			<h2 className="my-6 text-pretty text-3xl font-semibold tracking-tight text-gray-700">

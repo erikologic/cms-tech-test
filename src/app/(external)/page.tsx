@@ -1,5 +1,5 @@
 import React from 'react';
-import { LinkButton } from '../component/link-button';
+import { LinkButton } from '../component/nav';
 
 export default async function Home() {
 	return (

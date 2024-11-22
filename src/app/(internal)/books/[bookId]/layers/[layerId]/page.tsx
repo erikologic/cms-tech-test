@@ -1,7 +1,8 @@
 import { cookies } from 'next/headers';
 import { displayBookWithToken } from '@/app/api/display-book-at-layer/route';
-import { LinkButton } from '@/app/component/link-button';
-import { PageTitle } from '@/app/component/page-title';
+import { LinkButton, NavBar } from '@/app/component/nav';
+import { PageTitle } from '@/app/component/typography';
+import React from 'react';
 
 export default async function LayersPage({
 	params,
@@ -18,11 +19,11 @@ export default async function LayersPage({
 
 	return (
 		<>
-			<nav className="mt-4 flex gap-4">
+			<NavBar>
 				<LinkButton href={`/books/${bookId}`}>
 					Back to Layers
 				</LinkButton>
-			</nav>
+			</NavBar>
 			<PageTitle>Book content:</PageTitle>
 
 			<ul>

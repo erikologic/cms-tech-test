@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import AddLayerForm from './form';
-import { PageTitle } from '@/app/component/page-title';
+import { PageTitle } from '@/app/component/typography';
 
 export default async function NewLayer({
 	params,

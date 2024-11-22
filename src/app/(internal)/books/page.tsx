@@ -1,8 +1,8 @@
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { listBooksFromToken } from '../../api/list-books/route';
-import { PageTitle } from '../../component/page-title';
-import { LinkButton } from '../../component/link-button';
+import { PageTitle } from '../../component/typography';
+import { LinkButton, NavBar } from '../../component/nav';
 
 const NoBooks = () => <p>No books yet!</p>;
 
@@ -31,10 +31,10 @@ export default async function Home() {
 	const isEmptyList = books.length === 0;
 	return (
 		<>
-			<nav className="mt-4 flex gap-4">
+			<NavBar>
 				<LinkButton href={'/books/new'}>Add book</LinkButton>
 				<LinkButton href={'/api/sign-out'}>Sign out</LinkButton>
-			</nav>
+			</NavBar>
 
 			<PageTitle>Your Books</PageTitle>
 			{isEmptyList ? <NoBooks /> : <BooksList books={books} />}

@@ -31,8 +31,8 @@ export default function SignUpForm() {
                 router.push("/")
             }).catch((error) => {
                 setError("root", {
-                    message: error.message,
-                })
+                  message: error.message,
+              })
             })  
       }
     

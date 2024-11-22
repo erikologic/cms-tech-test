@@ -8,7 +8,11 @@ type Inputs = {
 }
 
 
-export default function SignInForm() {
+interface AddBookFormProps {
+    token: string
+}
+
+export default function AddBookForm({token}: AddBookFormProps) {
     const router = useRouter()
     const {
         register,
@@ -17,18 +21,19 @@ export default function SignInForm() {
         formState: { errors },
       } = useForm<Inputs>()
       const onSubmit: SubmitHandler<Inputs> = (data) => {
-        fetch("/api/sign-in", {
+        fetch("/api/generate-book", {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
               "Content-Type": "application/json",
+              "Authorization": token
             },
             }).then(async (response) => {
                 if (!response.ok) {
                     const message = await response.text()
                     throw new Error(message)
                 }
-                router.push("/books");
+                router.push("/books")
             }).catch((error) => {
                 setError("root", {
                     message: error.message,
@@ -43,7 +48,7 @@ export default function SignInForm() {
             <input {...register("name", { required: true })} id="name"/>
             {errors.name && <span>This field is required</span>}
             <input type="submit" value="Submit"></input>
-            {errors.root && <span>Couldn&apos;t sign-in user: {errors.root.message}</span>}
+            {errors.root && <span>Couldn&apos;t create book: {errors.root.message}</span>}
         </form>
       )
 }

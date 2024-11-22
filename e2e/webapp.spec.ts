@@ -19,13 +19,17 @@ test("webapp", async ({ page }) => {
   await page.getByLabel("Name").fill(user);
   await page.getByText("Submit").click();
 
+
   // THEN I'm told I have no books yet
+  // TODO display name
   await expect(page.getByText("No books yet")).toBeVisible();
 
   // WHEN I add a book
-  await page.getByRole("button", { name: "Add book" }).click();
+  await page.getByText("Add book").click();
+  expect(page.getByTitle("Add book")).toBeVisible();
   const bookTitle = withEntropy("Alice's Adventures in Wonderland");
-  await page.getByLabel("title").fill(withEntropy(bookTitle));
+  await page.getByLabel("name").fill(bookTitle);
+  await page.getByText("Submit").click();
 
   // THEN I see the book in the list
   await expect(page.getByRole("cell", { name: bookTitle })).toBeVisible();

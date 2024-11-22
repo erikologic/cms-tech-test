@@ -1,24 +1,26 @@
-import { redirect } from "next/navigation";
-import { cookies } from 'next/headers'
-import AddLayerForm from "./form";
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
+import AddLayerForm from './form';
+import { PageTitle } from '@/app/component/page-title';
 
-export default async function NewLayer({params}: {
-  params: Promise<{ bookId: string }>
+export default async function NewLayer({
+	params,
+}: {
+	params: Promise<{ bookId: string }>;
 }) {
+	const cookieStore = await cookies();
+	const token = cookieStore.get('token')?.value;
 
-  const cookieStore = await cookies()
-  const token = cookieStore.get('token')?.value
+	if (!token) {
+		redirect('/sign-in');
+	}
 
-  if (!token) {
-      redirect("/sign-in");
-  }
+	const bookId = Number((await params).bookId);
 
-  const bookId = Number((await params).bookId);
-
-  return (
-    <main>
-        <h1>Add layer</h1>
-        <AddLayerForm token={token} bookId={bookId} />
-    </main>
-  );
+	return (
+		<main>
+			<PageTitle>Add layer</PageTitle>
+			<AddLayerForm token={token} bookId={bookId} />
+		</main>
+	);
 }

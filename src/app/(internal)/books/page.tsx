@@ -1,6 +1,5 @@
 import { cookies } from 'next/headers';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import { listBooksFromToken } from '../../api/list-books/route';
 import { PageTitle } from '../../component/page-title';
 import { LinkButton } from '../../component/link-button';
@@ -26,11 +25,7 @@ const BooksList = ({ books }: BooksListProps) => (
 
 export default async function Home() {
 	const cookieStore = await cookies();
-	const token = cookieStore.get('token')?.value;
-
-	if (!token) {
-		redirect('/sign-in');
-	}
+	const token = cookieStore.get('token')!.value;
 
 	const books = await listBooksFromToken(token);
 	const isEmptyList = books.length === 0;

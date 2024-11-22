@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { displayBookWithToken } from '@/app/api/display-book-at-layer/route';
 import { LinkButton } from '@/app/component/link-button';
@@ -10,11 +9,8 @@ export default async function LayersPage({
 	params: Promise<{ layerId: string; bookId: string }>;
 }) {
 	const cookieStore = await cookies();
-	const token = cookieStore.get('token')?.value;
+	const token = cookieStore.get('token')!.value;
 
-	if (!token) {
-		redirect('/sign-in');
-	}
 	const { layerId: layerSlug, bookId } = await params;
 	const layerId = layerSlug === 'latest' ? undefined : Number(layerSlug);
 

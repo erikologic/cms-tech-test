@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { getBookWithToken } from '@/app/api/get-book/route';
 import { listLayersFromToken } from '@/app/api/list-layers/route';
@@ -12,11 +11,7 @@ export default async function BookPage({
 	params: Promise<{ bookId: string }>;
 }) {
 	const cookieStore = await cookies();
-	const token = cookieStore.get('token')?.value;
-
-	if (!token) {
-		redirect('/sign-in');
-	}
+	const token = cookieStore.get('token')!.value;
 
 	const bookId = Number((await params).bookId);
 

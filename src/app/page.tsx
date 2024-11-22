@@ -11,7 +11,7 @@ export default async function Home() {
 	}
 
 	return (
-		<main className="flex flex-col items-center">
+		<>
 			<h1 className="text-balance py-6 text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">
 				Abecederies CMS
 			</h1>
@@ -22,6 +22,6 @@ export default async function Home() {
 				<LinkButton href={'/sign-up'}>Sign up</LinkButton>
 				<LinkButton href={'/sign-in'}>Sign in</LinkButton>
 			</div>
-		</main>
+		</>
 	);
 }

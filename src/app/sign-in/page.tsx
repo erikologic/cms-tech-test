@@ -1,10 +1,11 @@
-import SignInForm from "./form";
+import { PageTitle } from '../component/page-title';
+import SignInForm from './form';
 
 export default function SignIn() {
-  return (
-    <main>
-        <h1>Sign in</h1>
-        <SignInForm />
-    </main>
-  );
+	return (
+		<>
+			<PageTitle>Sign in</PageTitle>
+			<SignInForm />
+		</>
+	);
 }

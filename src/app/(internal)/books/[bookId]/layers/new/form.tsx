@@ -108,7 +108,7 @@ export default function AddLayerForm({ token, bookId }: AddLayerFormProps) {
 			</div>
 
 			{fields.map((field, index) => (
-				<div key={field.id} className="pt-4 sm:col-span-3">
+				<div key={field.id} className="pt-4">
 					<label
 						htmlFor={`value-${index}`}
 						className="block text-sm/6 font-medium text-gray-900"

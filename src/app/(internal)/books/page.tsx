@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { listBooksFromToken } from '../../api/list-books/route';
 import { PageTitle } from '../../component/typography';
 import { LinkButton, NavBar } from '../../component/nav';
+import React from 'react';
+import { StyledListItem } from '@/app/component/lists';
 
 const NoBooks = () => <p>No books yet!</p>;
 
@@ -13,12 +15,9 @@ interface BooksListProps {
 const BooksList = ({ books }: BooksListProps) => (
 	<ul>
 		{books.map(book => (
-			<li
-				key={book.id}
-				className="mt-3 text-lg/6 font-semibold text-gray-900 hover:text-gray-600"
-			>
+			<StyledListItem key={book.id} className="mt-3">
 				<Link href={`/books/${book.id}`}>{book.name}</Link>
-			</li>
+			</StyledListItem>
 		))}
 	</ul>
 );

@@ -3,6 +3,7 @@ import { displayBookWithToken } from '@/app/api/display-book-at-layer/route';
 import { LinkButton, NavBar } from '@/app/component/nav';
 import { PageTitle } from '@/app/component/typography';
 import React from 'react';
+import { StyledListItem } from '@/app/component/lists';
 
 export default async function LayersPage({
 	params,
@@ -28,12 +29,9 @@ export default async function LayersPage({
 
 			<ul>
 				{values.map(value => (
-					<li
-						key={value}
-						className="mt-1 text-lg/6 font-semibold text-gray-900 hover:text-gray-600"
-					>
+					<StyledListItem key={value} className="mt-1">
 						{value}
-					</li>
+					</StyledListItem>
 				))}
 			</ul>
 		</>

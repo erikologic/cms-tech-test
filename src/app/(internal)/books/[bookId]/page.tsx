@@ -4,6 +4,7 @@ import { listLayersFromToken } from '@/app/api/list-layers/route';
 import Link from 'next/link';
 import { PageTitle } from '@/app/component/typography';
 import { LinkButton, NavBar } from '@/app/component/nav';
+import { StyledListItem } from '@/app/component/lists';
 
 export default async function BookPage({
 	params,
@@ -38,14 +39,11 @@ export default async function BookPage({
 			</h2>
 			<ul>
 				{layers.map(layer => (
-					<li
-						key={layer.id}
-						className="mt-3 text-lg/6 font-semibold text-gray-900 hover:text-gray-600"
-					>
+					<StyledListItem key={layer.id} className="mt-3">
 						<Link href={`/books/${bookId}/layers/${layer.id}`}>
 							{layer.name}
 						</Link>
-					</li>
+					</StyledListItem>
 				))}
 			</ul>
 		</>

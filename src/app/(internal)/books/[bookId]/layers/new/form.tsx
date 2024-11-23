@@ -86,7 +86,7 @@ export default function AddLayerForm({ token, bookId }: AddLayerFormProps) {
 
 			{fields.map((field, index) => (
 				<div key={field.id} className="pt-4">
-					<InputLabel htmlFor="name">Value</InputLabel>
+					<InputLabel htmlFor={`value-${index}`}>Value</InputLabel>
 
 					<div className="flex align-top">
 						<InputText

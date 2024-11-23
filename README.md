@@ -118,6 +118,10 @@ The system is designed to be pretty usable by different classes of users:
 
 The system is not designed to support teams/organisations, which is a feature that should be prioritised.
 
+Also, at some scale we should expect multiple users operating on the same books, and therefore things like locking and optimistic concurrency should be taken into consideration.  
+For example, we would only allow appending layers against a specific last layer id, and if we understand that the layer has been updated in the meantime, we would reject the operation.
+The Web App should be revisited as well to support real time updates, or at least a polling mechanism.
+
 The Web App is tested with Playwright using implicit attributes whenever possible, which should help support different type of browser users.  
 More could be done, e.g. testing with tools like Axe.
 

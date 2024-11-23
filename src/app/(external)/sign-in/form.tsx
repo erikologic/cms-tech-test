@@ -1,5 +1,6 @@
 'use client';
 
+import { raiseWhenNotOk } from '@/app/component/fetch';
 import {
 	InputLabel,
 	InputText,
@@ -30,11 +31,8 @@ export default function SignInForm() {
 				'Content-Type': 'application/json',
 			},
 		})
-			.then(async response => {
-				if (!response.ok) {
-					const message = await response.text();
-					throw new Error(message);
-				}
+			.then(raiseWhenNotOk)
+			.then(() => {
 				router.push('/books');
 			})
 			.catch(error => {

@@ -11,6 +11,7 @@ import {
 	InputText,
 	StyledForm,
 } from '@/app/component/form';
+import { raiseWhenNotOk } from '@/app/component/fetch';
 
 type Inputs = {
 	name: string;
@@ -56,11 +57,8 @@ export default function AddLayerForm({ token, bookId }: AddLayerFormProps) {
 				Authorization: token,
 			},
 		})
+			.then(raiseWhenNotOk)
 			.then(async response => {
-				if (!response.ok) {
-					const message = await response.text();
-					throw new Error(message);
-				}
 				const {
 					data: { layerId },
 				} = await response.json();

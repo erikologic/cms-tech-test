@@ -102,7 +102,8 @@ More could be done, e.g. testing with tools like Axe.
 
 The Web App is also designed with a mobile-first approach, so it should be easy to use on a small device.
 
-Also, although functional, the Web App could be more visually appealing.
+Also, although functional, the Web App could be more visually appealing.  
+Plus, dark mode!  
 
 The REST API could offer some specifications, e.g., OpenAPI, to help consumers understand how to interact.
 

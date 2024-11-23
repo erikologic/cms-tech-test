@@ -66,7 +66,7 @@ The endpoints are tested indirectly from the E2E browser tests.
 
 `src/app/*`  
 A NextJs app that provides a GUI to interact with the CMS library through the REST API.  
-The app is tested with Playwright.
+The app happy path is tested with Playwright.
 
 ## Scaling up considerations
 
@@ -164,3 +164,12 @@ HoneyComb is particularly good at creating aggregation from "fat granular events
 -   create a time series showing the resource consumption (e.g. duration ms) between the various customers
 -   clicking on the time series would allow us to break apart further the details of that aggregation, e.g. which endpoint was the most consuming
 -   from there, we could enter into a detailed trace to explore which calls were particularly costly, including across a multi-layered system
+
+## AI & I
+
+I used ChatGPT to clarify the requirements a bit, asking perhaps to rephrase some sentences.  
+I also quickly discussed technology choices to understand solutions, but went corroborating with the actual documentation.  
+I use Copilot extensively in my coding sessions, mostly as a smart code completion tool, but also from time to time to solve low/mid-maybe complexity problems.
+
+My approach with LLMs is to use them as a surrogate pair/team member whom to bounce ideas and get feedback, but also sometimes for clarifying and summarising informations.  
+I'm aware of hallucination and their limitations in reasoning, so I try to use them for their best capabilities: summarisation and interpolation.

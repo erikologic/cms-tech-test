@@ -14,7 +14,7 @@ A simple CMS demo project.
 This project uses DevContainer.  
 To work on the project, you can use VSCode + Docker (local) or Github Codespaces (cloud).
 
-### DevContainer (locat)
+### DevContainer (local)
 
 DevContainer is a VSCode extension that allows you to run a container with all the project dependencies.  
 This is useful to avoid installing all the dependencies on your machine and sandboxing the project from your machine, avoiding dependency conflicts and security issues.
@@ -26,6 +26,9 @@ This is useful to avoid installing all the dependencies on your machine and sand
 -   VSCode will ask you to open the project in a container. If it doesn’t, reload the window or find the option in the command palette: `CMD/CTRL + SHIFT + P` -> `Remote-Containers: Reopen in Container.`
 -   All the dependencies will be installed, and the project will launch the dev server, unit tests, and the e2e tests runner.  
      _This might take a while the first time._
+
+_Sometimes I noticed some issues when restarting too fast._  
+_Make sure to close VSC, wait few secs for the containers to shutdown, and then start again._
 
 ### Github Codespaces (cloud)
 
@@ -43,6 +46,24 @@ _Be sure to select a 4+ vCPU machine!_
 
 -   All the dependencies will be installed, and the project will launch the dev server, unit tests, and the e2e tests runner
     _This might take a while._
+
+_Codespaces might not launch the e2e tests runner automatically._  
+_In that case, from the terminal panel, open the "Browser test UI" task and click on the http://0.0.0.0:PORT link._
+
+### Manual setup
+
+If you prefer to set up the project manually, you can follow these steps:
+
+-   Install NodeJs
+-   Install PostgreSQL - expose the DB connection string as `DATABASE_URL` in the environment
+-   Install Playwright dependencies: `npx playwright install-deps`
+-   Run the setup script: `./setup.sh`
+
+Then:
+
+-   Run the dev server: `npm run dev`
+-   Run the tests: `npm test`
+-   Run the e2e tests: `npm run test:e2e:ui`
 
 ## Design
 
@@ -103,7 +124,7 @@ More could be done, e.g. testing with tools like Axe.
 The Web App is also designed with a mobile-first approach, so it should be easy to use on a small device.
 
 Also, although functional, the Web App could be more visually appealing.  
-Plus, dark mode!  
+Plus, dark mode!
 
 The REST API could offer some specifications, e.g., OpenAPI, to help consumers understand how to interact.
 

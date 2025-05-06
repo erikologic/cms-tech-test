@@ -1,6 +1,14 @@
 # Abecederies CMS
 
-A simple CMS demo project.
+A simple CMS demo project:
+
+```
+We're a publishing company that only publishes Abecedaries -- that is, children's books of the form "A is for Apple, B is for Banana, ...".  
+We need a content management system for these books.  
+Books can be layered in a series of "versions."  
+Higher layers override the values of lower layers.  
+Layers need not be complete, but they cannot be empty.
+```
 
 ## Stack
 

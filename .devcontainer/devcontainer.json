@@ -10,17 +10,6 @@
 	"mounts": [
 		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached"
 	],
-	"portsAttributes": {
-		"3000": {
-			"label": "app",
-			"onAutoForward": "openPreview"
-		}
-	},
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [
-		3000,
-		5432
-	],
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		// To run Sonarlint
@@ -36,28 +25,6 @@
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
-			"settings": {
-				"tasks": {
-					"version": "2.0.0",
-					"tasks": [
-						{
-							"label": "dev server",
-							"type": "shell",
-							"command": "npm run dev"
-						},
-						{
-							"label": "test watch",
-							"type": "shell",
-							"command": "npm run test:watch"
-						},
-						{
-							"label": "browser test UI",
-							"type": "shell",
-							"command": "npm run test:e2e:ui"
-						}
-					]
-				}
-			},
 			"extensions": [
 				"bierner.markdown-mermaid",
 				"bradlc.vscode-tailwindcss",

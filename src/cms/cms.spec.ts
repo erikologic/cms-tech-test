@@ -8,10 +8,10 @@ import {
 	defaultValues,
 	addLayer,
 	listLayers,
+	listBooks,
 	createUser,
 } from './cms';
 import { v4 as uuidv4 } from 'uuid';
-import { listBooks } from './cms';
 
 const withEntropy = (s: string) => `${s}-${uuidv4()}`;
 
@@ -19,7 +19,7 @@ const generateString = (length: number) =>
 	Array.from({ length }, () => 'a').join('');
 const lengthyWord = generateString(51);
 
-describe('cms', () => {
+describe('cms internal library', () => {
 	describe('one user', () => {
 		let userId: number;
 		beforeAll(async () => {

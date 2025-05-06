@@ -1,8 +1,5 @@
 # Abecederies CMS
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/erikologic/react-dynamic-template-demo)  
-_Note: use 4 cores!_
-
 A simple CMS demo project:
 
 ```
@@ -31,18 +28,17 @@ DevContainer is a VSCode extension that allows you to run a container with all t
 This is useful to avoid installing all the dependencies on your machine and sandboxing the project from your machine, avoiding dependency conflicts and security issues.
 
 - Install VSCode and Docker
-- Open this project with VSCode
-- VSCode should recommend you install the DevContainer extension.  
-     If not, install it manually.
+- Clone this project locally and open it with VSCode
+- VSCode should recommend you to install the DevContainer extension. If not, install it manually.
 - VSCode will ask you to open the project in a container. If it doesn’t, reload the window or find the option in the command palette: `CMD/CTRL + SHIFT + P` -> `Remote-Containers: Reopen in Container.`
-- All the dependencies will be installed.  _This might take a while._
+- A devcontainer will be provisioned and all the dependencies will be installed.  _This might take a while._
 
 ### Github Codespaces (cloud)
 
 Github Codespaces is a cloud-based development environment that allows you to work on the project from the browser or VSC without installing anything on your machine.  
 This provides for the ultimate sandbox experience, and the ability to contribute into the project from everywhere.
 
-- Push the repository to GitHub
+- Fork the repo
 - Create a Codespace by following [this guide](https://docs.github.com/en/codespaces/developing-in-a-codespace/creating-a-codespace-for-a-repository) or editing this link with the correct OWNER / PROJECT value:
 
 ```
@@ -51,7 +47,7 @@ https://github.com/codespaces/new/$OWNER/$PROJECT?skip_quickstart=true&machine=s
 
 _Be sure to select a 4+ vCPU machine!_
 
-- Github will provision a Codespace machine for you.
+- Github will provision a Codespace container for you.
 - All the dependencies will be installed. _This might take a while._
 
 ### Manual setup

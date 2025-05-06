@@ -1,5 +1,8 @@
 # Abecederies CMS
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/erikologic/react-dynamic-template-demo)  
+_Note: use 4 cores!_
+
 A simple CMS demo project:
 
 ```

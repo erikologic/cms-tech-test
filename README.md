@@ -73,7 +73,9 @@ The project provides three ways to interact with the CMS:
 
 `src/cms/cms.ts`  
 A library to interact with the CMS intended for internal use.  
-The library is tested in integration with a local PostgreSQL database.
+The library is TDD'ed in integration with a local PostgreSQL database.  
+Generally, I would prefer to test in-memory, avoiding integrating with external resources using hex architecture.  
+In this case, I felt there isn't much business logic to test and is far more valuable offering a quick dev environment for testing queries, table definitions, etc.  
 
 ### REST API
 
@@ -87,9 +89,10 @@ The endpoints are tested indirectly from the E2E browser tests.
 
 `src/app/*`  
 A NextJs app that provides a GUI to interact with the CMS library through the REST API.  
-The app happy path is tested with Playwright.
+The app was developed by laying out an happy path in a Playwright using GIVEN/WHEN/THEN and then TDD'ing against that.  
+I'm conscious about testing happy paths only, but given the time constrain this should be sufficient.  
 
-## Scaling up considerations
+## Considerations on evolving this project
 
 My previous manager has a handy architectural quality mnemonic: [MUSTAPO](https://www.codefiend.co.uk/mustapo-architecture-qualities-list/).
 
@@ -101,7 +104,8 @@ GitHub Actions would be good enough, e.g.:
 - [Run tests](https://github.com/erikologic/nextjs13-template-vercel/blob/main/.github/workflows/playwright.yml)
 - [Deploy to Vercel](https://github.com/erikologic/nextjs13-template-vercel/blob/main/.github/workflows/deploy_vercel.yml)
 
-The project is designed from the ground up to be well-testable and, therefore, easy to maintain and extend.
+The project is designed from the ground up to be well-testable and, therefore, easy to maintain and extend.  
+Also, it leverages the type system - which is great for avoiding wrong symbols usage, but also to describe the domain in a way that ["makes the impossible state impossible"](https://www.youtube.com/watch?v=IcgmSRJHu_8).
 
 If the product evolves, the domain is likely to be extensive, and it should be split into more meaningful subdomains (with or without the proper architectural boundaries).
 
@@ -170,14 +174,14 @@ For the database, we could gradually improve scalability by:
 
 - query optimisation: e.g. the displayBookAtLayer query ATM fetches all the layers contents for a particular book and aggregates server side - this could be optimised with a query that performs the aggregation inside the DB,
 - vertical scaling,
-- horizontal scaling: I am not sure if Vercel would support that, perhaps it would require migrating into Supabase or AWS RDS,
+- horizontal scaling,
 - sharding: e.g. perhaps the data is well suited to be partitioned at customer/organisation
 
 ### Observability
 
-Vercel provides some logging and metrics.  
+Platforms like Vercel and AWS provide server-side logging and metrics.  
 We are flying blind regarding client-side errors and alarming in general.  
-I suggest adding Sentry or a similar error reporting on both the client and server side ASAP.
+I suggest adding Sentry, CloudWatch Alarms or a similar error reporting on both the client and server side ASAP.
 
 In the long term, I had a good experience with OpenTelemetry and HoneyComb and would suggest using it to:
 

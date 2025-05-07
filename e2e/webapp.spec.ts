@@ -21,7 +21,6 @@ test('webapp', async ({ page }) => {
 	await page.getByRole('button', { name: 'Sign in' }).click();
 
 	// THEN I'm told I have no books yet
-	// TODO display name
 	await expect(page.getByText('No books yet')).toBeVisible();
 
 	// WHEN I add a book
